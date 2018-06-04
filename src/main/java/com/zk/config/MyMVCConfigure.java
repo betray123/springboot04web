@@ -1,12 +1,12 @@
 package com.zk.config;
 
+import com.zk.component.LoginHandlerInterceptor;
+import com.zk.component.MylocaleResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistration;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.*;
 
 /**
  * Created by zk on 18/6/3.
@@ -32,8 +32,22 @@ public class MyMVCConfigure extends WebMvcConfigurerAdapter{
             public void addViewControllers(ViewControllerRegistry registry) {
                 registry.addViewController("/").setViewName("login");
                 registry.addViewController("/index.html").setViewName("login");
+                registry.addViewController("/dashboard.html").setViewName("dashboard");
+            }
+
+            //注册拦截器组件
+            @Override
+            public void addInterceptors(InterceptorRegistry registry) {
+//                super.addInterceptors(registry);
+                registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**").excludePathPatterns("/","/index.html","/user/login");
             }
         };
         return adapter;
+    }
+
+    //将自己写的国际化配置类加入容器
+    @Bean
+    public LocaleResolver localeResolver(){
+        return new MylocaleResolver();
     }
 }

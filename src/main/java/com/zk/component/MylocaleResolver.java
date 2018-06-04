@@ -1,0 +1,35 @@
+package com.zk.component;
+
+/**
+ * Created by zk on 18/6/4.
+ */
+
+import org.springframework.lang.Nullable;
+import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.LocaleResolver;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Locale;
+
+/**
+ * 可以在链接上携带区域信息
+ * 自己定义国际化解析器
+ */
+public class MylocaleResolver implements LocaleResolver{
+    @Override
+    public Locale resolveLocale(HttpServletRequest httpServletRequest) {
+        String l = httpServletRequest.getParameter("l");
+        Locale locale = Locale.getDefault();
+        if (!StringUtils.isEmpty(l)){
+            String[] split = l.split("_");
+            locale = new Locale(split[0], split[1]);
+        }
+        return locale;
+    }
+
+    @Override
+    public void setLocale(HttpServletRequest httpServletRequest, @Nullable HttpServletResponse httpServletResponse, @Nullable Locale locale) {
+
+    }
+}
